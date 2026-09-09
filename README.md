@@ -13,8 +13,21 @@ place.
 - The silence packet is `F4 FF FE` followed by 197 zero bytes and matches the
   Zeroplus reference byte-for-byte.
 - Vanessa confirmed the capture-01 interpretation and result on 2026-09-08.
-- Capture 02 has been received as two `.cfax` files and has not yet been
-  extracted or validated.
+- Capture 02 is confirmed as of 2026-09-09: 4,861 packets from
+  `TEST_PM16_26_35.cfax` via `opus_2.csv`, all CRC valid, decoding as 48 kHz
+  stereo for 48.61 seconds without FFmpeg warnings, with a passing listening
+  review.
+- The two audio variants are successive phases of one session, not concurrent
+  streams. Variant B is the idle phase and is 91.7 % silence; variant A carries
+  the audio. Capture 02 contains variant A only because it began after the
+  changeover.
+- Recorded durations are packet counts. Lost packets are concatenated without a
+  marker, so elapsed time is 72.22 s for capture 01 and 48.81 s for capture 02.
+- `TEST_PM1620.cfax`, delivered with the capture-02 material, extracts to a
+  stream byte-for-byte identical to capture 01. It is the same session in a
+  different container, so it now lives under `data/capture-01/raw/`.
+- Capture 01's `.ogg.opus` was built by an earlier version of the extractor and
+  cannot be reproduced by the current tool; its OpusTags vendor string differs.
 
 The earlier 199/263-byte interpretation is retained only under
 `archive/invalid-extraction-v1/`. It must not be used as decoder input.
@@ -24,10 +37,10 @@ The earlier 199/263-byte interpretation is retained only under
 ```text
 data/
   capture-01/
-    raw/                 Original CSV capture
+    raw/                 Original CSV capture and its analyzer container
     results/             Corrected Opus and decoded audio
   capture-02/
-    raw/                 Vanessa's second capture
+    raw/                 Vanessa's second capture and its CSV export
     results/             Reserved for validated results
 reference/zeroplus/      Known Zeroplus Opus reference
 tools/                   Extraction and dependency setup tools
