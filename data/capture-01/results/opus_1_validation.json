@@ -1,0 +1,24 @@
+{
+  "source": "data/capture-01/raw/opus_1.csv",
+  "packets": 7191,
+  "packet_bytes": 200,
+  "variants": {
+    "A": 4757,
+    "B": 2434
+  },
+  "silence_packets": 2235,
+  "crc_valid": 7191,
+  "crc_checked": true,
+  "first_frame": "2301",
+  "last_frame": "104444",
+  "sample_rate_hz": 48000,
+  "channels": 2,
+  "frame_duration_ms": 10,
+  "duration_seconds": 71.91,
+  "outputs": {
+    "opus_raw": "data/capture-01/results/opus_1_corrected_zeroplus.opus_raw",
+    "ogg_opus": "data/capture-01/results/opus_1_corrected.ogg.opus",
+    "pcm": "data/capture-01/results/opus_1_corrected_s16le_stereo.pcm",
+    "wav": "data/capture-01/results/opus_1_corrected.wav"
+  }
+}
