@@ -30,31 +30,195 @@ data/
     raw/                 Vanessa's second capture
     results/             Reserved for validated results
 reference/zeroplus/      Known Zeroplus Opus reference
-tools/                   Reproducible extraction tools
+tools/                   Extraction and dependency setup tools
 docs/                    Protocol notes and validation evidence
 archive/                 Superseded local outputs, excluded from Git
 ```
 
-## Reproduce capture 01
+## Requirements
 
-Python 3 is sufficient to build the `.opus_raw` and `.ogg.opus` files. FFmpeg
-is required only for PCM/WAV decoding.
+- Windows 64-bit.
+- PowerShell 5.1 or newer.
+- Python 3.8 or newer available as `python`.
+- Git LFS when cloning the capture and audio files from GitHub.
+- Internet access during the one-time FFmpeg setup.
+
+FFmpeg is needed only to create `.pcm` and `.wav`. Extraction to `.opus_raw`
+and `.ogg.opus` uses only Python.
+
+## First-time setup
+
+### 1. Clone the repository and retrieve Git LFS files
 
 ```powershell
-python tools/extract_report36_opus.py data/capture-01/raw/opus_1.csv --decode
+git clone https://github.com/nabilbachroin/PS5-opus_decrypt.git
+cd PS5-opus_decrypt
+git lfs install
+git lfs pull
 ```
 
-The default output directory is the capture's sibling `results` directory.
-Use `--ffmpeg C:\path\to\ffmpeg.exe` if FFmpeg is not on `PATH`.
+If this repository is already cloned, start PowerShell in the repository root
+and skip to step 2.
 
-## File conventions
+### 2. Check Python
 
-- `.opus_raw`: Zeroplus-compatible framing, repeated as a 4-byte big-endian
-  payload length (`00 00 00 C8`) followed by one 200-byte Opus packet.
-- `.ogg.opus`: the same Opus packets wrapped in the standard Ogg Opus
-  container.
-- `.pcm`: signed 16-bit little-endian, stereo, 48 kHz PCM.
-- `.wav`: the same decoded PCM with a WAV header.
+```powershell
+python --version
+```
 
-Large binary artifacts are configured for Git LFS. This repository is local
-until a remote and publication policy are explicitly chosen.
+The command must print Python 3.8 or newer. If `python` is not recognized,
+install Python and reopen PowerShell.
+
+### 3. Install the repository-local FFmpeg
+
+```powershell
+.\tools\setup_ffmpeg.ps1
+```
+
+The setup script downloads the pinned Windows x64 wheel for
+`imageio-ffmpeg 0.5.1`, verifies its SHA-256, and extracts only `ffmpeg.exe` to:
+
+```text
+tools/.vendor/ffmpeg/ffmpeg.exe
+```
+
+This local dependency is ignored by Git and must not be committed. Re-running
+the setup is safe. Use `-Force` only when the local copy must be replaced:
+
+```powershell
+.\tools\setup_ffmpeg.ps1 -Force
+```
+
+If PowerShell blocks local scripts, run this once for the current process:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\tools\setup_ffmpeg.ps1
+```
+
+### 4. Verify FFmpeg
+
+```powershell
+& .\tools\.vendor\ffmpeg\ffmpeg.exe -version
+```
+
+The command should print the FFmpeg version and exit without an error.
+
+## Reproduce capture 01
+
+### Extract Opus without decoding
+
+```powershell
+python .\tools\extract_report36_opus.py `
+  .\data\capture-01\raw\opus_1.csv
+```
+
+This creates `.opus_raw`, `.ogg.opus`, and a validation JSON file. FFmpeg is not
+used by this command.
+
+### Extract and decode to PCM/WAV
+
+```powershell
+python .\tools\extract_report36_opus.py `
+  .\data\capture-01\raw\opus_1.csv `
+  --decode
+```
+
+With `--decode`, the tool automatically checks for FFmpeg in this order:
+
+1. The path supplied through `--ffmpeg`.
+2. `tools/.vendor/ffmpeg/ffmpeg.exe` installed by the setup script.
+3. `ffmpeg` available on the system `PATH`.
+
+The default output directory is `data/capture-01/results/`. Existing files with
+the same names are replaced.
+
+Expected validation summary for capture 01:
+
+```text
+packets:            7191
+packet_bytes:       200
+variants:           A=4757, B=2434
+silence_packets:    2235
+crc_valid:          7191
+sample_rate_hz:     48000
+channels:           2
+duration_seconds:   71.91
+```
+
+### Use a different FFmpeg executable
+
+```powershell
+python .\tools\extract_report36_opus.py `
+  .\data\capture-01\raw\opus_1.csv `
+  --decode `
+  --ffmpeg C:\path\to\ffmpeg.exe
+```
+
+### Use a different output directory
+
+```powershell
+python .\tools\extract_report36_opus.py `
+  .\data\capture-01\raw\opus_1.csv `
+  --output-dir .\work\capture-01 `
+  --decode
+```
+
+## Generated files
+
+- `*_corrected_zeroplus.opus_raw`: Zeroplus-compatible framing, repeated as a
+  4-byte big-endian payload length (`00 00 00 C8`) followed by one 200-byte
+  Opus packet.
+- `*_corrected.ogg.opus`: the same Opus packets wrapped in the standard Ogg
+  Opus container.
+- `*_corrected_s16le_stereo.pcm`: signed 16-bit little-endian, stereo, 48 kHz
+  PCM without a container header.
+- `*_corrected.wav`: the decoded PCM with a WAV header.
+- `*_validation.json`: packet counts, CRC result, codec parameters, duration,
+  and output paths.
+
+## Troubleshooting
+
+### `FFmpeg was not found`
+
+Run:
+
+```powershell
+.\tools\setup_ffmpeg.ps1
+```
+
+Then repeat the extraction command with `--decode`.
+
+### `python` is not recognized
+
+Install Python 3.8 or newer and enable the option that adds Python to `PATH`,
+then open a new PowerShell window.
+
+### GitHub files contain only LFS pointer text
+
+Install Git LFS and retrieve the real files:
+
+```powershell
+git lfs install
+git lfs pull
+```
+
+### Validate downloaded evidence
+
+Reference SHA-256 values for the raw and derived evidence are stored in
+`SHA256SUMS.txt`. Example:
+
+```powershell
+Get-FileHash -Algorithm SHA256 `
+  .\data\capture-01\raw\opus_1.csv
+```
+
+Compare the printed hash with the corresponding line in `SHA256SUMS.txt`.
+
+## Dependency policy
+
+The FFmpeg executable is intentionally downloaded during setup instead of being
+committed to this repository. This keeps third-party platform-specific binaries
+out of Git while still making the validated decoding workflow reproducible.
+
+Large capture and audio artifacts are managed through Git LFS.

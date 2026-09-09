@@ -3,6 +3,7 @@ __pycache__/
 .venv/
 deps/
 .deps/
+tools/.vendor/
 
 # Preserved locally for audit history, but not suitable for version control.
 archive/invalid-extraction-v1/extracted_opus_1/

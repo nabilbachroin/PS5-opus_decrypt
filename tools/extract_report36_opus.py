@@ -179,9 +179,20 @@ def find_ffmpeg(explicit: Path | None) -> str:
         if not explicit.is_file():
             raise FileNotFoundError(f"FFmpeg not found: {explicit}")
         return str(explicit)
+
+    local_dir = Path(__file__).resolve().parent / ".vendor" / "ffmpeg"
+    local_names = ("ffmpeg.exe", "ffmpeg")
+    for name in local_names:
+        local_ffmpeg = local_dir / name
+        if local_ffmpeg.is_file():
+            return str(local_ffmpeg)
+
     found = shutil.which("ffmpeg")
     if not found:
-        raise FileNotFoundError("FFmpeg is not on PATH; pass --ffmpeg C:\\path\\to\\ffmpeg.exe")
+        raise FileNotFoundError(
+            "FFmpeg was not found. Run tools/setup_ffmpeg.ps1, add FFmpeg to PATH, "
+            "or pass --ffmpeg C:\\path\\to\\ffmpeg.exe"
+        )
     return found
 
 
