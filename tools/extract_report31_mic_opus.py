@@ -52,6 +52,8 @@ ENCODED_RATE = 24000       # from TOC config 26, super-wideband
 DECODER_RATE = 48000       # Opus always runs its decoder here
 SAMPLES_PER_PACKET = 480   # 10 ms at 48 kHz, the Ogg granule unit
 
+DSP_HEADER_WORDS = 2       # OPUS_RX_HDR_WORDS on the DSP: 4-byte big-endian length
+
 SEQ_BACKWARD_WINDOW = 32
 SEQ_SEGMENT_GAP = 64
 MIN_SEGMENT_SLOTS = 100
@@ -68,6 +70,14 @@ def parse_args() -> argparse.Namespace:
         "--keep-crc-invalid",
         action="store_true",
         help="use a damaged frame when no valid copy of that sequence exists",
+    )
+    parser.add_argument(
+        "--dsp-slot",
+        type=int,
+        action="append",
+        metavar="PAYLOAD_BYTES",
+        help="also write MCU/DSP slot framing sized for this payload, zero padded "
+             "(repeatable; 71 gives a 76-byte slot, 200 gives 204)",
     )
     parser.add_argument(
         "--min-segment",
@@ -117,6 +127,39 @@ def write_zeroplus(path: Path, packets) -> None:
         for packet in packets:
             stream.write(struct.pack(">I", len(packet)))
             stream.write(packet)
+
+
+def dsp_slot_bytes(payload_bytes: int, header_words: int = DSP_HEADER_WORDS) -> int:
+    """Slot size the DSP reads per frame, rounded up to a 16-bit word boundary.
+
+    Mirrors OPUS_RX_PKT_WORDS in the DSP's config.h:
+
+        OPUS_RX_PKT_WORDS = OPUS_RX_HDR_WORDS + (OPUS_RX_PAYLOAD_BYTES + 1) / 2
+
+    An odd payload rounds up, so 71 bytes occupy a 76-byte slot, not 75. Feeding
+    the tightly packed .opus_raw to a decoder configured for 71 desynchronises
+    after the first frame.
+    """
+    return 2 * (header_words + (payload_bytes + 1) // 2)
+
+
+def write_dsp_slot(path: Path, packets, payload_bytes: int) -> int:
+    """MCU/DSP slot framing: 4-byte big-endian length, payload, zero pad.
+
+    The DSP reads a fixed-size slot per frame and takes the real length from
+    the header, so a payload shorter than the slot is padded with zeros.
+    """
+    slot = dsp_slot_bytes(payload_bytes)
+    with path.open("wb") as stream:
+        for packet in packets:
+            if len(packet) > payload_bytes:
+                raise SystemExit(
+                    "packet of %d bytes does not fit --dsp-slot %d" % (len(packet), payload_bytes)
+                )
+            stream.write(struct.pack(">I", len(packet)))
+            stream.write(packet)
+            stream.write(bytes(slot - 4 - len(packet)))
+    return slot
 
 
 def write_ogg(path: Path, packets) -> None:
@@ -327,6 +370,11 @@ def main() -> None:
     write_ogg(ogg_path, packets)
 
     outputs = {"opus_raw": str(raw_path), "ogg_opus": str(ogg_path)}
+    for payload_bytes in args.dsp_slot or []:
+        slot = dsp_slot_bytes(payload_bytes)
+        slot_path = output_dir / ("%s_dspslot%d.opus_raw" % (basename, slot))
+        write_dsp_slot(slot_path, packets, payload_bytes)
+        outputs["dsp_slot_%d" % slot] = str(slot_path)
     if args.decode:
         outputs.update(decode(find_ffmpeg(args.ffmpeg), ogg_path, output_dir, basename))
 

@@ -110,6 +110,58 @@ clipping, so this capture is the cleaner measurement of the two.
 Downstream code may downmix to mono without losing anything audible. The
 decoder itself must still be configured for 2 channels.
 
+### Framing for the ATS3085 DSP
+
+`mic_uplink_2_zeroplus.opus_raw` is tightly packed: a 4-byte big-endian length
+followed immediately by the 71-byte packet, so records repeat every 75 bytes.
+That matches the header the DSP expects, since `pcm_hdr_get_len()` in
+`codec_pcm.c` reads a 2-word header as a big-endian 32-bit value.
+
+It does **not** match the slot the DSP reads. `config.h` derives the slot as
+
+```text
+OPUS_RX_PKT_WORDS = OPUS_RX_HDR_WORDS + (OPUS_RX_PAYLOAD_BYTES + 1) / 2
+```
+
+which rounds an odd payload up to a 16-bit word boundary:
+
+| `OPUS_RX_PAYLOAD_BYTES` | `OPUS_RX_PKT_WORDS` | Slot |
+| ---: | ---: | ---: |
+| 78 | 40 | 80 B |
+| 200 | 102 | 204 B |
+| **71** | **38** | **76 B** |
+
+The first two reproduce the values the DSP's own comments record, so the
+arithmetic is confirmed. 71 bytes therefore occupy a **76-byte** slot, not 75.
+Feeding the tightly packed file to a decoder configured for 71 decodes the
+first frame and then desynchronises.
+
+`--dsp-slot` writes the padded form the DSP expects, a 4-byte big-endian
+length, the payload, then zero padding to the full slot:
+
+```powershell
+python .\tools\extract_report31_mic_opus.py `
+  .\data\capture-mic-02\raw\260915PM1129_MIC_TEST.cfax `
+  --basename mic_uplink_2 `
+  --dsp-slot 200 --dsp-slot 71 `
+  --decode
+```
+
+| File | Slot | Pad | Use |
+| --- | ---: | ---: | --- |
+| `mic_uplink_2_dspslot204.opus_raw` | 204 B | 129 B | `OPUS_RX_PAYLOAD_BYTES` left at 200, no DSP rebuild |
+| `mic_uplink_2_dspslot76.opus_raw` | 76 B | 1 B | `OPUS_RX_PAYLOAD_BYTES` set to 71 |
+
+The length check in `codec_pcm.c` is `payload_bytes > OPUS_RX_PAYLOAD_BYTES`, so
+71 passes against a 200-byte slot unchanged. Both files were verified by
+reimplementing `pcm_hdr_get_len()` and `pcm_pkt_unpack()` byte for byte: all
+3,109 frames read back length 71, TOC `0xD4`, and a payload identical to the
+tightly packed file.
+
+Decoder parameters are runtime arguments to `opus_decoder_create()`, so the MCU
+must supply them: **2 channels**, and 24000 or 48000 Hz. Two channels is not
+optional, because the TOC stereo bit is set.
+
 ## Speaker downlink
 
 ```powershell

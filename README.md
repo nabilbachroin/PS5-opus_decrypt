@@ -372,6 +372,9 @@ From `tools/extract_report31_mic_opus.py` (microphone uplink):
 - `*_s16le_stereo_24k.pcm` and `*_24k.wav`: decoded at the encoded rate.
 - `*_s16le_stereo_48k.pcm` and `*_48k.wav`: decoded at the Opus decoder's
   native rate.
+- `*_dspslot<N>.opus_raw`: written by `--dsp-slot`. The same big-endian length
+  and payload, zero padded to the fixed slot the ATS3085 DSP reads. An odd
+  payload rounds up to a word boundary, so 71 bytes give a 76-byte slot.
 - `*_validation.json`: type distribution, CRC and TOC statistics, per-segment
   loss, codec parameters, duration, and output paths.
 
