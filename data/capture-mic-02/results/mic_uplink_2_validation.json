@@ -127,6 +127,8 @@
   "outputs": {
     "opus_raw": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2_zeroplus.opus_raw",
     "ogg_opus": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2.ogg.opus",
+    "dsp_slot_204": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2_dspslot204.opus_raw",
+    "dsp_slot_76": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2_dspslot76.opus_raw",
     "pcm_24k": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2_s16le_stereo_24k.pcm",
     "wav_24k": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2_24k.wav",
     "pcm_48k": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2_s16le_stereo_48k.pcm",
