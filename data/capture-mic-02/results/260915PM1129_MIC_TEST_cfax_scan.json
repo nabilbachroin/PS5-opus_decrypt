@@ -1,0 +1,54 @@
+{
+  "scanned_frames": 4420,
+  "crc_valid": 4203,
+  "crc_invalid": 217,
+  "unknown_marker": 17,
+  "bad_length_byte": 1,
+  "bad_opus_toc": 1,
+  "truncated": 0,
+  "usable_frames": 4401,
+  "l2cap_cids": {
+    "0x4a": 4415,
+    "0x1242": 2,
+    "0x804a": 1,
+    "0x6a": 1,
+    "0x904a": 1
+  },
+  "session_marker_byte": {
+    "0x0": 4402,
+    "0x10": 1
+  },
+  "source": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\raw\\260915PM1129_MIC_TEST.cfax",
+  "crc_invalid_dropped": 217,
+  "segments": [
+    {
+      "variant": "A",
+      "sequence_slots": 3049,
+      "retransmissions": 1149,
+      "lost_slots": 90,
+      "loss_percent": 2.867,
+      "first_offset": 15898566,
+      "last_offset": 31740698
+    }
+  ],
+  "detached_bursts_dropped": [
+    {
+      "variant": "A",
+      "sequence_slots": 5,
+      "retransmissions": 0,
+      "lost_slots": 27,
+      "loss_percent": 84.375,
+      "first_offset": 32131014,
+      "last_offset": 31953198
+    }
+  ],
+  "emitted_packets": 3049,
+  "variants": {
+    "A": 3049
+  },
+  "silence_packets": 0,
+  "duration_seconds": 30.49,
+  "outputs": {
+    "csv": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\260915PM1129_MIC_TEST_report36.csv"
+  }
+}

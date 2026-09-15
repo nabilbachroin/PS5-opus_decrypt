@@ -1,0 +1,135 @@
+{
+  "report31_frames": 16424,
+  "report31_types": {
+    "1": 12359,
+    "2": 4020,
+    "3": 11,
+    "0": 8,
+    "5": 8,
+    "9": 5,
+    "6": 3,
+    "11": 3,
+    "10": 3,
+    "7": 3,
+    "8": 1
+  },
+  "mic_frames": 4020,
+  "crc_valid": 3509,
+  "crc_invalid": 511,
+  "bad_opus_toc": 29,
+  "truncated": 0,
+  "usable_frames": 3991,
+  "opus_toc": {
+    "0xd4": 3991,
+    "0xc4": 5,
+    "0x94": 4,
+    "0xd5": 3,
+    "0xd6": 3,
+    "0xf4": 2,
+    "0xdc": 2,
+    "0xd0": 1,
+    "0xdd": 1,
+    "0x30": 1,
+    "0xa8": 1,
+    "0xac": 1,
+    "0xfc": 1,
+    "0x54": 1,
+    "0x7e": 1,
+    "0xd8": 1,
+    "0xf5": 1
+  },
+  "l2cap_cids": {
+    "0xf9": 3959,
+    "0x16a": 33,
+    "0xb9": 5,
+    "0xf1": 4,
+    "0x2f9": 3,
+    "0x1f9": 1,
+    "0x12f9": 1,
+    "0xb1": 1,
+    "0xfb": 1,
+    "0x479": 1,
+    "0x28f9": 1,
+    "0x44f1": 1,
+    "0x4f9": 1,
+    "0x88f9": 1,
+    "0x80f8": 1,
+    "0x2b9": 1,
+    "0xd9": 1,
+    "0x4fd": 1,
+    "0xe9": 1,
+    "0x8f9": 1,
+    "0x10f9": 1
+  },
+  "source": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\raw\\260915PM1129_MIC_TEST.cfax",
+  "crc_invalid_dropped": 511,
+  "segments": [
+    {
+      "sequence_slots": 1292,
+      "retransmissions": 149,
+      "lost_slots": 138,
+      "loss_percent": 9.65,
+      "first_offset": 15942650,
+      "last_offset": 22275852
+    },
+    {
+      "sequence_slots": 139,
+      "retransmissions": 20,
+      "lost_slots": 7,
+      "loss_percent": 4.795,
+      "first_offset": 22284760,
+      "last_offset": 22937884
+    },
+    {
+      "sequence_slots": 1678,
+      "retransmissions": 224,
+      "lost_slots": 124,
+      "loss_percent": 6.881,
+      "first_offset": 22942704,
+      "last_offset": 31740260
+    }
+  ],
+  "detached_bursts_dropped": [
+    {
+      "sequence_slots": 1,
+      "retransmissions": 0,
+      "lost_slots": 0,
+      "loss_percent": 0.0,
+      "first_offset": 22282312,
+      "last_offset": 22282312
+    },
+    {
+      "sequence_slots": 1,
+      "retransmissions": 0,
+      "lost_slots": 0,
+      "loss_percent": 0.0,
+      "first_offset": 22941880,
+      "last_offset": 22941880
+    },
+    {
+      "sequence_slots": 4,
+      "retransmissions": 1,
+      "lost_slots": 28,
+      "loss_percent": 87.5,
+      "first_offset": 32122494,
+      "last_offset": 31957386
+    }
+  ],
+  "packets": 3109,
+  "packet_bytes": 71,
+  "silence_packets": 0,
+  "lost_slots": 269,
+  "encoded_sample_rate_hz": 24000,
+  "decoder_sample_rate_hz": 48000,
+  "channels": 2,
+  "frame_duration_ms": 10,
+  "duration_seconds": 31.09,
+  "outputs": {
+    "opus_raw": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2_zeroplus.opus_raw",
+    "ogg_opus": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2.ogg.opus",
+    "pcm_24k": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2_s16le_stereo_24k.pcm",
+    "wav_24k": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2_24k.wav",
+    "pcm_48k": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2_s16le_stereo_48k.pcm",
+    "wav_48k": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-02\\results\\mic_uplink_2_48k.wav"
+  }
+}
