@@ -1,0 +1,134 @@
+{
+  "scanned_frames": 10358,
+  "crc_valid": 9715,
+  "crc_invalid": 643,
+  "unknown_marker": 97,
+  "bad_length_byte": 9,
+  "bad_opus_toc": 5,
+  "truncated": 0,
+  "usable_frames": 10247,
+  "l2cap_cids": {
+    "0x45": 10330,
+    "0x5": 5,
+    "0x8045": 4,
+    "0x4d": 3,
+    "0x47": 3,
+    "0x1045": 2,
+    "0xc5": 2,
+    "0x1007": 1,
+    "0x4005": 1,
+    "0x4c": 1,
+    "0x845": 1,
+    "0x255": 1,
+    "0x41": 1,
+    "0x245": 1,
+    "0x44": 1,
+    "0x10c5": 1
+  },
+  "session_marker_byte": {
+    "0x46": 10249,
+    "0x4e": 3,
+    "0xc6": 3,
+    "0x44": 2,
+    "0x56": 2,
+    "0x6": 1,
+    "0x16": 1
+  },
+  "source": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-01\\raw\\PM0453_MIC_TEST.cfax",
+  "crc_invalid_dropped": 643,
+  "segments": [
+    {
+      "variant": "B",
+      "sequence_slots": 708,
+      "retransmissions": 365,
+      "lost_slots": 55,
+      "loss_percent": 7.208,
+      "first_offset": 48269740,
+      "last_offset": 51905640
+    },
+    {
+      "variant": "B",
+      "sequence_slots": 4290,
+      "retransmissions": 1222,
+      "lost_slots": 160,
+      "loss_percent": 3.596,
+      "first_offset": 51909728,
+      "last_offset": 74414984
+    },
+    {
+      "variant": "A",
+      "sequence_slots": 2408,
+      "retransmissions": 708,
+      "lost_slots": 231,
+      "loss_percent": 8.753,
+      "first_offset": 74427730,
+      "last_offset": 89750858
+    }
+  ],
+  "detached_bursts_dropped": [
+    {
+      "variant": "A",
+      "sequence_slots": 2,
+      "retransmissions": 0,
+      "lost_slots": 0,
+      "loss_percent": 0.0,
+      "first_offset": 47724816,
+      "last_offset": 47726748
+    },
+    {
+      "variant": "B",
+      "sequence_slots": 1,
+      "retransmissions": 0,
+      "lost_slots": 0,
+      "loss_percent": 0.0,
+      "first_offset": 51908704,
+      "last_offset": 51908704
+    },
+    {
+      "variant": "A",
+      "sequence_slots": 2,
+      "retransmissions": 0,
+      "lost_slots": 0,
+      "loss_percent": 0.0,
+      "first_offset": 74419538,
+      "last_offset": 74416268
+    },
+    {
+      "variant": "A",
+      "sequence_slots": 2,
+      "retransmissions": 0,
+      "lost_slots": 8,
+      "loss_percent": 80.0,
+      "first_offset": 90005934,
+      "last_offset": 89952382
+    },
+    {
+      "variant": "A",
+      "sequence_slots": 4,
+      "retransmissions": 1,
+      "lost_slots": 23,
+      "loss_percent": 85.185,
+      "first_offset": 90409662,
+      "last_offset": 90255740
+    },
+    {
+      "variant": "A",
+      "sequence_slots": 2,
+      "retransmissions": 0,
+      "lost_slots": 0,
+      "loss_percent": 0.0,
+      "first_offset": 90634512,
+      "last_offset": 90628252
+    }
+  ],
+  "emitted_packets": 7406,
+  "variants": {
+    "B": 4998,
+    "A": 2408
+  },
+  "silence_packets": 2973,
+  "duration_seconds": 74.06,
+  "outputs": {
+    "csv": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-01\\results\\PM0453_MIC_TEST_report36.csv"
+  }
+}
