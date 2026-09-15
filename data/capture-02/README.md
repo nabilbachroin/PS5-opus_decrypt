@@ -89,6 +89,31 @@ This is clipping present in the source material, not a decode artifact. Capture
 01 shows the same trait at lower severity (27 clipped samples). Capture 02 was
 recorded roughly 12 dB hotter, which explains the difference.
 
+## ATS3085 DSP decode: `results/from3085DSP/`
+
+Status: **Candidate**, measured 2026-09-14. `ps5_result_capture02.pcm` is a
+hardware decode of this capture produced outside this repository on
+2026-09-11. Its provenance beyond the file name is not recorded here.
+
+Compared against `opus_2_corrected_s16le_stereo.pcm`, the FFmpeg reference:
+
+- 9,331,200 bytes against 9,333,120, a difference of exactly 1,920 bytes. The
+  DSP emitted 4,860 of the 4,861 packets and stops one 10 ms frame early. It is
+  otherwise aligned from sample 0, with no offset.
+- Error RMS is 1.07 against a reference RMS of 3,541, so the difference sits
+  70.4 dB below the signal.
+- 57.86 % of samples are bit-exact, 90.73 % are within 1 LSB, 98.60 % within
+  3 LSB.
+- The 1.40 % of samples differing by 4 LSB or more begin at 20.68 s and cluster
+  from 21.9 s onward. That is where this capture steps up from about -29 dBFS
+  to -17 dBFS, so the deviation tracks signal level, which points at
+  float-to-int16 conversion rather than a decoder divergence.
+
+This is agreement at the level expected from rounding, not a decode defect. It
+is labelled Candidate because the DSP build, its conversion settings and the
+reason for the missing final frame are not recorded. Record them before
+promoting it.
+
 ## Transport losses
 
 Sequence-number continuity was checked per variant on the raw records.

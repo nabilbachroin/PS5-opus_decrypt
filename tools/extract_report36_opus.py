@@ -17,9 +17,12 @@ REPORT_SIZE = 398
 OPUS_SIZE = 200
 SAMPLES_PER_PACKET = 480  # 10 ms at 48 kHz.
 SILENCE_PACKET = b"\xF4\xFF\xFE" + bytes(197)
+# Marker at report offsets 67..71. Offset 70 carries a per-session value
+# (0x39 in captures 01 and 02, 0x46 in capture-mic-01, 0x00 in capture-mic-02)
+# and does not select the variant, so it is matched as a wildcard.
 VARIANTS = {
-    bytes.fromhex("91 05 6f 39 1f"): ("A", 73, 76),
-    bytes.fromhex("91 06 7f 39 1f"): ("B", 74, 77),
+    (0x91, 0x05, 0x6F, 0x1F): ("A", 73, 76),
+    (0x91, 0x06, 0x7F, 0x1F): ("B", 74, 77),
 }
 
 
@@ -109,7 +112,7 @@ def read_packets(source: Path, check_crc: bool) -> tuple[list[bytes], dict[str, 
                 raise ValueError(f"CRC mismatch at frame {frame}")
             crc_valid += int(crc_ok)
 
-            variant_info = VARIANTS.get(report[67:72])
+            variant_info = VARIANTS.get((report[67], report[68], report[69], report[71]))
             if variant_info is None:
                 raise ValueError(f"unknown Report 0x36 audio variant at frame {frame}")
             variant, sequence_offset, payload_offset = variant_info

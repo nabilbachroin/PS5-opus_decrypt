@@ -1,0 +1,24 @@
+{
+  "source": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-01\\results\\PM0453_MIC_TEST_report36.csv",
+  "packets": 7406,
+  "packet_bytes": 200,
+  "variants": {
+    "A": 2408,
+    "B": 4998
+  },
+  "silence_packets": 2973,
+  "crc_valid": 7406,
+  "crc_checked": true,
+  "first_frame": "1",
+  "last_frame": "7406",
+  "sample_rate_hz": 48000,
+  "channels": 2,
+  "frame_duration_ms": 10,
+  "duration_seconds": 74.06,
+  "outputs": {
+    "opus_raw": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-01\\results\\mic_1_corrected_zeroplus.opus_raw",
+    "ogg_opus": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-01\\results\\mic_1_corrected.ogg.opus",
+    "pcm": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-01\\results\\mic_1_corrected_s16le_stereo.pcm",
+    "wav": "D:\\Bachroin\\ATS308X\\PS5-opus_decrypt\\data\\capture-mic-01\\results\\mic_1_corrected.wav"
+  }
+}
